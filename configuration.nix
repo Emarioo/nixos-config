@@ -1,134 +1,216 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
-
+{ config, lib, pkgs, ... }:
+let
+  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      (import "${home-manager}/nixos")
     ];
 
-  # Bootloader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.useOSProber = true;
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
+  home-manager.backupFileExtension = "backup";
+  home-manager.users.emarioo = import ./home.nix;
+  users.users.emarioo = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [
+      tree
+    ];
+  };
 
-  networking.hostName = "nixos"; # Define your hostname.
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  networking.hostName = "lapis"; # Define your hostname.
+  # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  security.polkit.enable = true;
+  
+  # Set your time zone.
+  time.timeZone = "Europe/Stockholm";
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Europe/Stockholm";
-
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "sv_SE.UTF-8";
-    LC_IDENTIFICATION = "sv_SE.UTF-8";
-    LC_MEASUREMENT = "sv_SE.UTF-8";
-    LC_MONETARY = "sv_SE.UTF-8";
-    LC_NAME = "sv_SE.UTF-8";
-    LC_NUMERIC = "sv_SE.UTF-8";
-    LC_PAPER = "sv_SE.UTF-8";
-    LC_TELEPHONE = "sv_SE.UTF-8";
-    LC_TIME = "sv_SE.UTF-8";
+  # i18n.defaultLocale = "en_US.UTF-8";
+  console = {
+    #font = "Lat2-Terminus16";
+    keyMap = "sv-latin1";
+    #useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  /**/
+  hardware.graphics.enable = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.open = false;
+  hardware.nvidia.nvidiaSettings = true;
+  hardware.nvidia.modesetting.enable = true;
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  hardware.nvidia.prime = {
+    offload.enable = true;
+    nvidiaBusId = "PCI:1:0:0";
+    amdgpuBusId = "PCI:6:0:0";
+  };
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.beta;
+  /**/
+  nixpkgs.config.allowUnfree = true;
 
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.xserver.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    #wayland.enable = true;
+    package = pkgs.kdePackages.sddm;
+    extraPackages = with pkgs; [
+      #sddm-astronaut
+      #kdePackages.qtbase
+      #kdePackages.qtmultimedia
+      #kdePackages.qtsvg
+      #kdePackages.qtvirtualkeyboard
+    ];
+    theme = "catppuccin-mocha";
+    #theme = "sddm-astronaut-theme";
+    /*settings = {
+      Theme = {
+        Current = "sddm-astronaut-theme";
+      };
+    };*/
+  };
+  # environment.sessionVariables.QT_QML_IMPORT_PATH = "${pkgs.kdePackages.qtmultimedia}/lib/qt-6/qml";
+  # TODO: Remove autologin
+  # services.displayManager.autoLogin.enable = true;
+  #services.displayManager.autoLogin.user = "emarioo";
 
   # Configure keymap in X11
   services.xserver.xkb = {
-    layout = "se";
-    variant = "";
+     layout = "se";
+     variant = "";
   };
-
-  # Configure console keymap
-  console.keyMap = "sv-latin1";
+  # services.xserver.xkb.options = "eurosign:e,caps:escape";
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # services.printing.enable = true;
 
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
+  # Enable sound.
+  # services.pulseaudio.enable = true;
+  # OR
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.emarioo = {
-    isNormalUser = true;
-    description = "emarioo";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      kdePackages.kate
-    #  thunderbird
-    ];
+  services.libinput = {
+    enable = true;
+    touchpad.tapping = false;
   };
+  # services.xserver.autoRepeatInterval = 100;
+  # services.xserver.autoRepeatDelay = 250;
 
-  # Enable automatic login for the user.
-  services.displayManager.autoLogin.enable = true;
-  services.displayManager.autoLogin.user = "emarioo";
-
-  # Install firefox.
   programs.firefox.enable = true;
+  programs.steam.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # List packages installed in system profile.
+  # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-     wget
-     vscode
-     neovim
-     tmux
-     git
-     gcc13
-     gdb
-     llvmPackages_20.libcxxClang
-     gcc-arm-embedded
-     qemu
-     python311
-     vsce # vscode extension thing
-     glfw
-     rofi-wayland
-     alacritty
-     waybar
-     mako
-     swww
-     #dolphin
-     wofi
+    # essentials
+    vim
+    wget
+    git
+    tmux
+    vlc
+    audacity
+    mpv
+    mesa
+    libGL
+    xorg.libX11
+    
+    # personal favorites
+    neofetch
+    # vscode in home.nix
+    valgrind
+    tracy
+    btop
+    spotify
+    ncspot
+    ( catppuccin-sddm.override {
+    flavor = "mocha";
+    font  = "Noto Sans";
+    fontSize = "9";
+    background = "${/home/emarioo/wallpapers/wallhaven-9depzk_1920x1080.png}";
+    loginBackground = true;
+    })
+    #sddm-astronaut
+    kdePackages.sddm # dependecnies too sddm-astronaut
+    #kdePackages.qtbase
+    #kdePackages.qtsvg
+    #kdePackages.qtvirtualkeyboard
+    #kdePackages.qtmultimedia
+
+    # themes, fonts, cursors
+    graphite-cursors
+
+    # programming tools
+    gcc13
+    gdb
+    python311   
+    cmake
+    gnumake
+ 
+    # desktop, hyprland utilities
+    kitty  # terminal
+    waybar # status bar
+    wofi   # app launcher
+    mako   # notifications
+    wl-clipboard
+    polkit
+    networkmanagerapplet
+    swww
+    kdePackages.dolphin    
+    swaylock
+
+    # laptop stuff
+    brightnessctl
+    playerctl
   ];
 
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+    xwayland.enable = true;
+  };
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = with pkgs; [
+    xdg-desktop-portal-wlr
+    xdg-desktop-portal-hyprland
+    xdg-desktop-portal-gtk
+  ];
+
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  services.blueman.enable = true;
+
+
+  systemd.user.services.lock-before-sleep = {
+    description = "Lock screen before suspend";
+    wantedBy = [ "sleep.target" ];
+    before = [ "sleep.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.swaylock}/bin/swaylock";
+    };
+  };
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -136,15 +218,7 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-  programs.hyprland = {
-     enable = true;
-     withUWSM = true;
-     xwayland.enable = true;
-  };
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = with pkgs; [
-     xdg-desktop-portal-wlr
-  ];
+
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -156,12 +230,29 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  # Copy the NixOS configuration file and link it from the resulting system
+  # (/run/current-system/configuration.nix). This is useful in case you
+  # accidentally delete configuration.nix.
+  # system.copySystemConfiguration = true;
+
+  # This option defines the first version of NixOS you have installed on this particular machine,
+  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
+  #
+  # Most users should NEVER change this value after the initial install, for any reason,
+  # even if you've upgraded your system to a new NixOS release.
+  #
+  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
+  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
+  # to actually do that.
+  #
+  # This value being lower than the current NixOS release does NOT mean your system is
+  # out of date, out of support, or vulnerable.
+  #
+  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
+  # and migrated your data accordingly.
+  #
+  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.05"; # Did you read the comment?
 
 }
+
