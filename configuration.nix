@@ -56,7 +56,7 @@ in
   hardware.nvidia.open = false;
   hardware.nvidia.nvidiaSettings = true;
   hardware.nvidia.modesetting.enable = true;
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  # environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Keypad delete key doesn't work in VSCode.fhs with this line. Something with Electron bugs with keys when using Wayland. Maybe it doesn't help that i use sv-latin1 keyboard layout?
   hardware.nvidia.prime = {
     offload.enable = true;
     nvidiaBusId = "PCI:1:0:0";
@@ -69,7 +69,7 @@ in
   services.xserver.enable = true;
   services.displayManager.sddm = {
     enable = true;
-    #wayland.enable = true;
+    wayland.enable = true;
     package = pkgs.kdePackages.sddm;
     extraPackages = with pkgs; [
       #sddm-astronaut
@@ -114,6 +114,8 @@ in
   services.libinput = {
     enable = true;
     touchpad.tapping = false;
+    touchpad.disableWhileTyping = false;
+    mouse.disableWhileTyping = false;
   };
   # services.xserver.autoRepeatInterval = 100;
   # services.xserver.autoRepeatDelay = 250;
@@ -138,6 +140,9 @@ in
     
     # personal favorites
     neofetch
+    krita # drawing program
+    parted
+    ntfs3g
     # vscode in home.nix
     valgrind
     tracy
@@ -192,7 +197,7 @@ in
   };
   xdg.portal.enable = true;
   xdg.portal.extraPortals = with pkgs; [
-    xdg-desktop-portal-wlr
+    # xdg-desktop-portal-wlr
     xdg-desktop-portal-hyprland
     xdg-desktop-portal-gtk
   ];
