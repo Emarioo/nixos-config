@@ -102,7 +102,7 @@ in
   # services.printing.enable = true;
 
   # Enable sound.
-  # services.pulseaudio.enable = true;
+  #services.pulseaudio.enable = true;
   # OR
   services.pipewire = {
     enable = true;
@@ -128,7 +128,9 @@ in
   environment.systemPackages = with pkgs; [
     # essentials
     vim
+    pkg-config
     wget
+    unzip
     git
     tmux
     vlc
@@ -140,9 +142,11 @@ in
     
     # personal favorites
     neofetch
-    krita # drawing program
+    krita   # drawing program
+    blender # 3d modelling
     parted
     ntfs3g
+    prismlauncher
     # vscode in home.nix
     valgrind
     tracy
@@ -172,6 +176,7 @@ in
     python311   
     cmake
     gnumake
+    qemu
  
     # desktop, hyprland utilities
     kitty  # terminal
@@ -182,8 +187,11 @@ in
     polkit
     networkmanagerapplet
     swww
+    mpvpaper
     kdePackages.dolphin    
     swaylock
+    mullvad
+    mullvad-vpn
 
     # laptop stuff
     brightnessctl
@@ -206,6 +214,7 @@ in
   hardware.bluetooth.powerOnBoot = true;
   services.blueman.enable = true;
 
+  services.mullvad-vpn.enable = true;
 
   systemd.user.services.lock-before-sleep = {
     description = "Lock screen before suspend";
