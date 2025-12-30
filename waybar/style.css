@@ -63,6 +63,7 @@ button:hover {
     box-shadow: inset 0 -3px #ffffff;
 }
 
+#custom-vpn,
 #clock,
 #battery,
 #cpu,
@@ -78,6 +79,58 @@ button:hover {
     border-radius: 5px;
 }
 
+/* #custom-vpn { */
+    /* background: rgba(15, 22, 35, 0.55);
+    border-radius: 7px; */
+    /* margin: 4px 3px; */
+    /* font-size: 14px; */
+/* } */
+
+/* Connected */
+#custom-vpn.connected {
+    color: #6fffd2;
+    padding: 4px 10px 6px 10px;
+    box-shadow:
+    inset 0 -2px #6fffd2,
+    0 0 8px rgba(100, 255, 200, 0.3);
+
+    transition: padding 0.8s;
+    transition: box-shadow 0.8s;
+}
+
+/* Disconnected */
+#custom-vpn.connecting {
+    color: rgb(212, 212, 212);
+    padding: 4px 10px 6px 10px;
+    box-shadow:
+    inset 0 -2px #b3b3b3;
+    transition: padding 0.8s;
+    transition: box-shadow 0.8s;
+    /* box-shadow:
+    inset 0 -2px #6bff8b,
+    0 0 8px rgba(0, 143, 71, 0.25); */
+}
+/* Disconnected */
+#custom-vpn.disconnected {
+    color: #ff6b6b;
+    padding: 4px 10px 4px 10px;
+    transition: padding 0.8s;
+    transition: box-shadow 0.8s;
+    /* box-shadow:
+        inset 0 -2px #ff6b6b,
+        0 0 8px rgba(255, 80, 80, 0.25); */
+}
+/* @keyframes vpn-pulse {
+    0% { box-shadow: 0 0 6px rgba(100,255,200,0.2); }
+    100% { box-shadow: 0 0 12px rgba(100,255,200,0.6); }
+} */
+
+/* #custom-vpn.connecting {
+    animation: vpn-pulse 1.5s infinite alternate;
+}
+#custom-vpn.connected {
+    animation: vpn-pulse 1.5s infinite alternate;
+} */
 
 #workspaces button {
     background: transparent;
@@ -162,7 +215,7 @@ button:hover {
     background-color: #f53c3c;
     color: #ffffff;
     animation-name: blink;
-    animation-duration: 0.5s;
+    animation-duration: 0.2s;
     animation-timing-function: steps(12);
     animation-iteration-count: infinite;
     animation-direction: alternate;
