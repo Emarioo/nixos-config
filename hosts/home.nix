@@ -46,6 +46,16 @@
         package = pkgs.vscode.fhs;
     };
 
+    xdg.configFile = {
+        "Code/User/settings.json".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${config.home.homeDirectory}/nixos-config/home/vscode/settings.json";
+
+        "Code/User/keybindings.json".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${config.home.homeDirectory}/nixos-config/home/vscode/keybindings.json";
+    };
+
     programs.firefox.enable = true;
 
     programs.neovim = {
