@@ -3,7 +3,7 @@
 # exec-once = swww-daemon &
 
 if [ "$1" == "img" ]; then
-    swww-daemon & swww img ~/wallpapers/wallhaven-mlqy18_1920x1080.png &
+    swww-daemon & swww img ~/wallpapers/wallhaven-mlqy18_1920x1080.png
 else
     LD_LIBRARY_PATH=/run/opengl-driver/lib \
         __NV_PRIME_RENDER_OFFLOAD=1 \
@@ -15,5 +15,5 @@ else
             scale=bilinear
             interpolation=no
             no-audio
-            loop" ALL ~/wallpapers/shorekeeper-rainy-day-wuthering-waves-moewalls-com.mp4 &
+            loop" ALL ~/wallpapers/shorekeeper-rainy-day-wuthering-waves-moewalls-com.mp4
 fi

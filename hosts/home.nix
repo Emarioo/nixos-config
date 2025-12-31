@@ -1,11 +1,11 @@
 { config, pkgs, ... }:
-
 {
     home.username = "emarioo";
     home.homeDirectory = "/home/emarioo";
 
     home.packages = with pkgs; [
         fd
+        git
         ripgrep
         tree
         home-manager
@@ -19,6 +19,8 @@
         spotify
         ncspot
 
+        waybar
+
         # Move elsewhere?
         valgrind
         tracy
@@ -30,18 +32,10 @@
     };
     programs.bash.enable = true;
 
-    let
-        cfgDir = /home/emarioo/nixos-config/home/emarioo/waybar;
-    in
-        programs.waybar = {
-            enable = true;
-            configFile = cfgDir + "/config.jsonc";
-            styleFile  = cfgDir + "/style.css";
-        };
-
     home.file = {
-        ".config/waybar/mullvad-click.sh".source = ~/nixos-config/home/waybar/mullvad-click.sh;
-        ".config/waybar/mullvad-status.sh".source = ~/nixos-config/home/waybar/mullvad-status.sh;
+        ".config/waybar".source = /home/emarioo/nixos-config/home/waybar;
+        ".config/hypr".source = /home/emarioo/nixos-config/home/hypr;
+        ".config/nvim".source = /home/emarioo/nixos-config/home/nvim;
     };
 
     home.sessionVariables = {
@@ -52,13 +46,7 @@
         package = pkgs.vscode.fhs;
     };
 
-    programs.git = {
-        enable = true;
-    };
-
     programs.firefox.enable = true;
-    programs.steam.enable = true;
-    programs.obs-studio.enable = true;
 
     programs.neovim = {
         enable = true;
@@ -80,8 +68,6 @@
             markdown-preview-nvim
         ];  
     };
-    # xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
-    programs.home-manager.enable = true;
   
     home.stateVersion = "25.05";
 }

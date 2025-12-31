@@ -1,7 +1,28 @@
 
 This config does not provide wallpapers (github has limit)
 
+# How to setup
+On a NixOS machine make sure a basic configuration.nix and hardware-configuration.nix has been made.
+
+You also need git to clone the repo.
+
+The config assumes user "emarioo" and that
+the repo is cloned at `/home/emarioo/nixos-config`.
+The config assumes host name "lapis".
+
+```bash
+nix-shell -p git
+
+cd ~
+git clone git:github.com:Emarioo/nixos-config
+cd nixos-config
+./link_config.sh # symlink in /etc/nixos/configuration.nix -> /home/emarioo/nixos-config/hosts/lapis
+sudo nixos-rebuild switch
+reboot
+```
+
 # TODO
+- [ ] Move vscode settings into nixos config
 - [ ] Figure out how to store all configs on github. neovim keybinds, nixos config, hyprland config, kitty config. waybar xml/json? and so on.
 - [ ] Where to store wallpapers? Keeping URL where i find it is not enough, it might disappear. Github has 10MB limit. Store on external SDD, VPS and other places?
       Time to finish unisync to backup them up in all places?

@@ -9,10 +9,14 @@ require'nvim-treesitter.configs'.setup{
     enable = true
   }
 }
+local builtin = require('telescope.builtin')
+
 vim.g.mapleader = " "
 vim.keymap.set('n', '<leader>ff', function()
-  require('telescope.builtin').find_files({ hidden = true })
-end, { desc = 'Find files (including hidden)' })
+  require('telescope.builtin').find_files({ hidden = true, no_ignore = true})
+end)
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) 
 
 -- Line numbers
 vim.opt.number = true
@@ -53,3 +57,5 @@ vim.opt.hidden = true
 
 -- Backspace behavior
 vim.opt.backspace = { "indent", "eol", "start" }
+
+-- vim.api.nvim_set_hl(0, "Keyword", {fg = 0x00FFFF})
