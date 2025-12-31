@@ -24,9 +24,9 @@ reboot
 ```
 
 # TODO
-- [ ] I cannot modify waybar, hyprland in real time without rebuilding configuration. I want two modes, one for normal usage with nixos reproducability and one where i can update waybar and other configs live.
+- [X] I cannot modify waybar, hyprland in real time without rebuilding configuration. I want two modes, one for normal usage with nixos reproducability and one where i can update waybar and other configs live. **UPDATE:** config.lib.file.mkOutOfStoreSymlink fixes it.
 - [ ] Move vscode settings into nixos config
-- [ ] Figure out how to store all configs on github. neovim keybinds, nixos config, hyprland config, kitty config. waybar xml/json? and so on.
+- [x] Figure out how to store all configs on github. neovim keybinds, nixos config, hyprland config, kitty config. waybar xml/json? and so on.
 - [ ] Where to store wallpapers? Keeping URL where i find it is not enough, it might disappear. Github has 10MB limit. Store on external SDD, VPS and other places?
       Time to finish unisync to backup them up in all places?
 - [ ] Hyprland
@@ -53,7 +53,7 @@ reboot
 - [ ] NixOS delete old builds automatically. GRUB is spammed with nixos configs which is unnecessary.
 - [x] Notifications like "Connected to WIFI" dont disappear unless i click on it. Its a nuisance.
 - [x] Auto connect bluetooth device. Same behaviour as when restoring panels after reboot.
-- [ ] Move nvim config and other configs to nixos home manager.
+- [x] Move nvim config and other configs to nixos home manager.
 
 
 # How to

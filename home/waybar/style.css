@@ -226,10 +226,15 @@ button:hover {
     color: #9fd3ff;
     letter-spacing: 1px;
 }
-
-#battery.charging,
+#battery.warning {
+    color: #ff9148;
+}
+#battery.critical {
+    color: #ff4545;
+}
 #battery.charging {
-    color: #6fffd2;
+    box-shadow: inset 0 -3px #68f880;
+    transition: box-shadow 0.8s ease-in-out;
 }
 
 @keyframes blink {

@@ -33,9 +33,9 @@
     programs.bash.enable = true;
 
     home.file = {
-        ".config/waybar".source = /home/emarioo/nixos-config/home/waybar;
-        ".config/hypr".source = /home/emarioo/nixos-config/home/hypr;
-        ".config/nvim".source = /home/emarioo/nixos-config/home/nvim;
+        ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/waybar";
+        ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/hypr";
+        ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/nvim";
     };
 
     home.sessionVariables = {
