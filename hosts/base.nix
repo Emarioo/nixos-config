@@ -151,6 +151,7 @@ in
     kdePackages.dolphin    
     swaylock
     graphite-cursors
+    (flameshot.override { enableWlrSupport = true; })
 
     # laptop stuff
     brightnessctl

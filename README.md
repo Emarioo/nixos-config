@@ -1,5 +1,7 @@
 
-This config does not provide wallpapers (github has limit)
+This config does not provide wallpapers (github has file size limit)
+
+![](/docs/img/nixos_screenshot.png)
 
 # How to setup
 On a NixOS machine make sure a basic configuration.nix and hardware-configuration.nix has been made.
@@ -22,6 +24,7 @@ reboot
 ```
 
 # TODO
+- [ ] I cannot modify waybar, hyprland in real time without rebuilding configuration. I want two modes, one for normal usage with nixos reproducability and one where i can update waybar and other configs live.
 - [ ] Move vscode settings into nixos config
 - [ ] Figure out how to store all configs on github. neovim keybinds, nixos config, hyprland config, kitty config. waybar xml/json? and so on.
 - [ ] Where to store wallpapers? Keeping URL where i find it is not enough, it might disappear. Github has 10MB limit. Store on external SDD, VPS and other places?

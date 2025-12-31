@@ -9,7 +9,7 @@ if echo "$status" | grep -q "^Connected"; then
 
     rm -f "$STATE_FILE"
 
-    echo "{\"text\":\"$location\",\"class\":\"connected\",\"tooltip\":\"Mullvad\n$relay\"}"
+    echo "{\"text\":\"VPN $location\",\"class\":\"connected\",\"tooltip\":\"Mullvad\n$relay\"}"
 elif [ -f "$STATE_FILE" ]; then
     echo '{"text":"VPN connecting...","class":"connecting","tooltip":"Mullvad: Connecting…"}'
 else
