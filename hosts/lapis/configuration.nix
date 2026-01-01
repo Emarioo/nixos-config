@@ -1,11 +1,12 @@
 
 { config, lib, pkgs, ... }:
+let
+  opts = import ../opts.nix {};
+in
 {
-  imports = [
-    ../base.nix
-  ];
+  imports = [ ../base.nix ];
 
-  networking.hostName = "lapis"; # Define your hostname.
+  networking.hostName = opts.hostName; # Define your hostname.
   
   # environment.systemPackages = base.environment.systemPackages ++ [ discord ];
 

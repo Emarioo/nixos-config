@@ -1,1 +1,6 @@
 hardware-configuration.nix
+wallpapers
+
+# ignore large files
+frieren-amidst-water-lilies-beyond-journeys-end-moewalls-com.mp4
+*.tar.gz*

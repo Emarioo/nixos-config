@@ -1,7 +1,10 @@
 { config, pkgs, ... }:
+let
+  opts = import ./opts.nix {};
+in
 {
-    home.username = "emarioo";
-    home.homeDirectory = "/home/emarioo";
+    home.username = opts.userName;
+    home.homeDirectory = "/home/${opts.userName}";
 
     home.packages = with pkgs; [
         fd
@@ -27,15 +30,10 @@
 
     ];
 
-    programs.tmux = {
-        enable = true;
-    };
-    programs.bash.enable = true;
-
     home.file = {
-        ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/waybar";
-        ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/hypr";
-        ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos-config/home/nvim";
+        ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/waybar";
+        ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/hypr";
+        ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/nvim";
     };
 
     home.sessionVariables = {
@@ -46,14 +44,30 @@
         package = pkgs.vscode.fhs;
     };
 
+    programs.tmux = {
+        enable = true;
+    };
+    programs.bash = {
+        enable = true;
+        initExtra = ''
+            export NIX2_CONFIG=${opts.repoPath}
+            export NIX2_USER=${opts.userName}
+            export NIX2_HOSTNAME=${opts.hostName}
+        '';
+    };
+
+    home.sessionVariables = {
+        NIX2_CONFIG=opts.repoPath;
+    };
+
     xdg.configFile = {
         "Code/User/settings.json".source =
             config.lib.file.mkOutOfStoreSymlink
-            "${config.home.homeDirectory}/nixos-config/home/vscode/settings.json";
+            "${opts.repoPath}/home/vscode/settings.json";
 
         "Code/User/keybindings.json".source =
             config.lib.file.mkOutOfStoreSymlink
-            "${config.home.homeDirectory}/nixos-config/home/vscode/keybindings.json";
+            "${opts.repoPath}/home/vscode/keybindings.json";
     };
 
     programs.firefox.enable = true;

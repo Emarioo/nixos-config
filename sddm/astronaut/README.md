@@ -1,3 +1,6 @@
+CLONED FROM https://github.com/Keyitdev/sddm-astronaut-theme
+
+I HAVED ADDED Themes/frieren.conf with frieren.mp4 video
 
 # sddm-astronaut-theme
 

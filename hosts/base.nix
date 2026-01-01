@@ -1,6 +1,11 @@
 { config, lib, pkgs, ... }:
 let
+  opts = import ./opts.nix {};
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
+  astronautTheme = pkgs.runCommand "sddm-astronaut-theme" {} ''
+    mkdir -p $out/share/sddm/themes
+    cp -r ${../sddm/astronaut} $out/share/sddm/themes/astronaut
+  '';
 in
 {
   imports = [
@@ -12,10 +17,10 @@ in
     useUserPackages = true;
     useGlobalPkgs = true;
     backupFileExtension = "backup";
-    users.emarioo = import ./home.nix;
+    users."${opts.userName}" = import ./home.nix;
   };
 
-  users.users.emarioo = {
+  users.users."${opts.userName}" = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [ ];
@@ -60,24 +65,18 @@ in
     wayland.enable = true;
     package = pkgs.kdePackages.sddm;
     extraPackages = with pkgs; [
-      #sddm-astronaut
-      #kdePackages.qtbase
-      #kdePackages.qtmultimedia
-      #kdePackages.qtsvg
-      #kdePackages.qtvirtualkeyboard
+      kdePackages.qtbase
+      kdePackages.qtmultimedia
+      kdePackages.qtsvg
+      kdePackages.qtvirtualkeyboard
     ];
-    theme = "catppuccin-mocha";
-    #theme = "sddm-astronaut-theme";
-    /*settings = {
-      Theme = {
-        Current = "sddm-astronaut-theme";
-      };
-    };*/
+    theme = "astronaut";
+    # theme = "catppuccin-mocha";
   };
   # environment.sessionVariables.QT_QML_IMPORT_PATH = "${pkgs.kdePackages.qtmultimedia}/lib/qt-6/qml";
   # TODO: Remove autologin
   # services.displayManager.autoLogin.enable = true;
-  #services.displayManager.autoLogin.user = "emarioo";
+  #services.displayManager.autoLogin.user = userName;
 
   # Enable sound.
   #services.pulseaudio.enable = true;
@@ -109,28 +108,15 @@ in
     mesa
     libGL
     xorg.libX11
-    
-    # personal favorites
-    
-    # vscode in home.nix
-    
+
+    astronautTheme
     ( catppuccin-sddm.override {
       flavor = "mocha";
       font  = "Noto Sans";
       fontSize = "9";
-      background = "${/home/emarioo/wallpapers/wallhaven-9depzk_1920x1080.png}";
+      background = "${opts.repoPath}/wallpapers/frieren-chilling-wallhaven.png";
       loginBackground = true;
     })
-    #sddm-astronaut
-    kdePackages.sddm # dependecnies too sddm-astronaut
-    #kdePackages.qtbase
-    #kdePackages.qtsvg
-    #kdePackages.qtvirtualkeyboard
-    #kdePackages.qtmultimedia
-
-    # @NOCHECKIN does services.mullvad-vpn.enable add these programs?
-    # mullvad
-    # mullvad-vpn
 
     # programming tools
     gcc13
