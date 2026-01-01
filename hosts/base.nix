@@ -45,6 +45,7 @@ in
     withUWSM = true;
     xwayland.enable = true;
   };
+  programs.hyprlock.enable = true;
   programs.steam.enable = true;
   programs.obs-studio.enable = true;
 
@@ -177,7 +178,7 @@ in
     before = [ "sleep.target" ];
     serviceConfig = {
       Type = "simple";
-      ExecStart = "${pkgs.swaylock}/bin/swaylock";
+      ExecStart = "${pkgs.hyprlock}/bin/hyprlock";
     };
   };
 
