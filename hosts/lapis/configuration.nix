@@ -1,10 +1,10 @@
 
 { config, lib, pkgs, ... }:
 let
-  opts = import ../opts.nix {};
+  opts = import ./opts.nix;
 in
 {
-  imports = [ ../base.nix ];
+  imports = [ (import ../base.nix { inherit config lib pkgs opts; }) ];
 
   networking.hostName = opts.hostName; # Define your hostname.
   

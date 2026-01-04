@@ -3,8 +3,6 @@ My NixOS config which I dual boot along with Windows on my laptop and desktop co
 ![](/docs/img/nixos_screenshot.png)
 
 # How to setup
-**NOTE:** Setup will probably not be flawless, you may need to tweak something. When I have time I will do more testing in fresh environments.
-
 On a NixOS machine make sure a basic configuration.nix and hardware-configuration.nix has been made.
 
 Then run these in your home directory or wherever you want the local nixos config:
@@ -19,14 +17,17 @@ cd nixos-config
 
 # download wallpapers github.com/Emarioo/nixos-config/Releases to ./wallpapers
 ./fetch_wallpapers.sh
+```
 
+Now copy `hosts/lapis` to `hosts/mypc` or whatever you want to name it.
+Change `hosts/mypyc/configuration.nix` and `hosts/mypyc/opts.nix` to your username, hostname, and whether
+you use Nvidia graphics card or not.
+
+Next up run this command to link `/etc/nixos/configuration.nix` to `hosts/mypyc/configuration.nix`.
+
+```bash
 # create symlink from /etc/nixos/configuration.nix -> /home/$USER/nixos-config/hosts/lapis/configuration.nix
 ./link_config.sh lapis  # lapis refers to ./hosts/lapis/configuration.nix
-
-# Before building NixOS configuration set user and host name.
-# These are the defaults.
-export NIX2_USER=emarioo
-export NIX2_HOSTNAME=lapis
 
 sudo nixos-rebuild switch
 reboot

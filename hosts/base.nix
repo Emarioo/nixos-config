@@ -1,6 +1,5 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, opts, ... }:
 let
-  opts = import ./opts.nix {};
   home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
   astronautTheme = pkgs.runCommand "sddm-astronaut-theme" {} ''
     mkdir -p $out/share/sddm/themes
@@ -17,7 +16,9 @@ in
     useUserPackages = true;
     useGlobalPkgs = true;
     backupFileExtension = "backup";
-    users."${opts.userName}" = import ./home.nix;
+    users."${opts.userName}" = {config, lib, pkgs, ...}: {
+      imports = [ (import ./home.nix {inherit config lib pkgs opts;}) ];
+    };
   };
 
   users.users."${opts.userName}" = {
@@ -53,6 +54,8 @@ in
   programs.hyprlock.enable = true;
   programs.steam.enable = true;
   programs.obs-studio.enable = true;
+
+  programs.ssh.startAgent = true;
 
   services.xserver.enable = true;
   services.xserver.xkb = {
@@ -135,7 +138,6 @@ in
     networkmanagerapplet
     swww
     mpvpaper
-    kdePackages.dolphin    
     swaylock
     graphite-cursors
     (flameshot.override { enableWlrSupport = true; })

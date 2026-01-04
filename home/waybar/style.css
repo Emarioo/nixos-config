@@ -73,18 +73,11 @@ button:hover {
 #window,
 #workspaces {
     background: rgba(35, 42, 65, 0.75);
-    margin: 4px 3px;
+    margin: 4px 6px;
     padding: 4px 10px;
 
     border-radius: 5px;
 }
-
-/* #custom-vpn { */
-    /* background: rgba(15, 22, 35, 0.55);
-    border-radius: 7px; */
-    /* margin: 4px 3px; */
-    /* font-size: 14px; */
-/* } */
 
 /* Connected */
 #custom-vpn.connected {
@@ -120,25 +113,6 @@ button:hover {
         inset 0 -2px #ff6b6b,
         0 0 8px rgba(255, 80, 80, 0.25); */
 }
-
-/* @keyframes vpn-pulse {
-    0% { box-shadow: 0 0 6px rgba(100,255,200,0.2); }
-    100% { box-shadow: 0 0 12px rgba(100,255,200,0.6); }
-} */
-
-/* #custom-vpn.connecting {
-    animation: vpn-pulse 1.5s infinite alternate;
-}
-#custom-vpn.connected {
-    animation: vpn-pulse 1.5s infinite alternate;
-} */
-
-/* Container */
-/* #workspaces { */
-    /* padding: 2px 4px;
-    margin: 0; */
-    /* font-size: 40px; */
-/* } */
 
 /* Buttons for workspaces */
 #workspaces button {
@@ -233,7 +207,7 @@ button:hover {
     color: #ff4545;
 }
 #battery.charging {
-    box-shadow: inset 0 -3px #68f880;
+    box-shadow: inset 0 -3px #68f880, 0 0 8px rgba(100, 255, 200, 0.2);
     transition: box-shadow 0.8s ease-in-out;
 }
 

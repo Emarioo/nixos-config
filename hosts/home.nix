@@ -1,7 +1,4 @@
-{ config, pkgs, ... }:
-let
-  opts = import ./opts.nix {};
-in
+{ config, lib, pkgs, opts, ... }:
 {
     home.username = opts.userName;
     home.homeDirectory = "/home/${opts.userName}";
@@ -34,6 +31,14 @@ in
         ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/waybar";
         ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/hypr";
         ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${opts.repoPath}/home/nvim";
+
+        ".config/Code/User/settings.json".source =
+            config.lib.file.mkOutOfStoreSymlink 
+            "${opts.repoPath}/home/vscode/settings.json";
+
+        ".config/Code/User/keybindings.json".source =
+            config.lib.file.mkOutOfStoreSymlink
+            "${opts.repoPath}/home/vscode/keybindings.json";
     };
 
     home.sessionVariables = {
@@ -51,23 +56,11 @@ in
         enable = true;
         initExtra = ''
             export NIX2_CONFIG=${opts.repoPath}
-            export NIX2_USER=${opts.userName}
-            export NIX2_HOSTNAME=${opts.hostName}
         '';
     };
 
     home.sessionVariables = {
         NIX2_CONFIG=opts.repoPath;
-    };
-
-    xdg.configFile = {
-        "Code/User/settings.json".source =
-            config.lib.file.mkOutOfStoreSymlink
-            "${opts.repoPath}/home/vscode/settings.json";
-
-        "Code/User/keybindings.json".source =
-            config.lib.file.mkOutOfStoreSymlink
-            "${opts.repoPath}/home/vscode/keybindings.json";
     };
 
     programs.firefox.enable = true;
