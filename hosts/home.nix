@@ -23,7 +23,6 @@
 
         # Move elsewhere?
         valgrind
-        tracy
 
     ];
 
@@ -56,6 +55,7 @@
         enable = true;
         initExtra = ''
             export NIX2_CONFIG=${opts.repoPath}
+            export PATH=~/dev/tracy/profiler/build:$PATH
         '';
     };
 
@@ -86,6 +86,6 @@
         ];  
     };
   
-    home.stateVersion = "25.05";
+    home.stateVersion = "25.11";
 }
 

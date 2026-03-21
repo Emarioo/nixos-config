@@ -1,6 +1,6 @@
 { config, lib, pkgs, opts, ... }:
 let
-  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.05.tar.gz;
+  home-manager = builtins.fetchTarball https://github.com/nix-community/home-manager/archive/release-25.11.tar.gz;
   astronautTheme = pkgs.runCommand "sddm-astronaut-theme" {} ''
     mkdir -p $out/share/sddm/themes
     cp -r ${../sddm/astronaut} $out/share/sddm/themes/astronaut
@@ -107,6 +107,7 @@ in
     ntfs3g
     parted
     meld
+    nix-index
 
     mesa
     libGL
@@ -170,6 +171,6 @@ in
     };
   };
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
 

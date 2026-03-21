@@ -18,5 +18,5 @@
     "hexeditor.inspectorType": "aside",
     "ols.prompt.AskCreateOLS": false,
     "glassit.alpha": 75,
-    "editor.minimap.autohide": true,
+    "editor.minimap.autohide": "mouseover",
 }

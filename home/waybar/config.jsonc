@@ -54,7 +54,7 @@
         "tooltip": false
     },
     "memory": {
-        "format": "RAM {}%"
+        "format": "RAM {used} GB / {total} GB"
     },
     "temperature": {
         "critical-threshold": 80,
@@ -65,7 +65,7 @@
             "warning": 30,
             "critical": 15
         },
-        "interval": 5,
+        "interval": 2,
         "format": "{icon} {capacity}%",
         "format-icons": [
             "▱▱▱▱▱",
